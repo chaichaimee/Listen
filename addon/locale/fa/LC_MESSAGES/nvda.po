@@ -1,0 +1,44 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Listen 2026.6.1\n"
+"Report-Msgid-Bugs-To: chaicm75@gmail.com\n"
+"POT-Creation-Date: 2026-06-02 06:52+0700\n"
+"PO-Revision-Date: 2026-06-02 07:00+0700\n"
+"Last-Translator: chaiBot and Malee Yamazaki\n"
+"Language-Team: Persian\n"
+"Language: fa\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: DevOn Addon\n"
+
+#: __init__.py:105
+msgid "Error loading file"
+msgstr "خطا در بارگذاری پرونده"
+
+#: __init__.py:265
+msgid "History Cleared"
+msgstr "تاریخچه پاک شد"
+
+#: __init__.py:102
+#: __init__.py:122
+#: __init__.py:146
+msgid "Listen Mode Active"
+msgstr "حالت شنیدن فعال است"
+
+#: __init__.py:126
+#: __init__.py:198
+msgid "Listen Mode Hidden"
+msgstr "حالت شنیدن پنهان است"
+
+#: __init__.py:289
+msgid "No audio files in folder"
+msgstr "هیچ پرونده‌ی صوتی در پوشه وجود ندارد"
+
+#: __init__.py:158
+msgid "Permanently Stopped"
+msgstr "برای همیشه متوقف شد"
+
+#: __init__.py:138
+msgid "Select Audio File"
+msgstr "انتخاب پرونده‌ی صوتی"

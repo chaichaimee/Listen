@@ -1,5 +1,4 @@
 # audio_engine.py
-# Copyright (C) 2026 Chai Chaimee
 
 import os
 import json
@@ -20,6 +19,7 @@ class AudioPlayer:
 		self._bookmarks = []
 		self._current_bookmark_index = -1
 		self._current_file_path = None
+		self._is_loaded = False
 
 	def _load_config(self):
 		if not os.path.exists(self.config_dir):
@@ -111,9 +111,12 @@ class AudioPlayer:
 		last_pos = self.data.get("positions", {}).get(path, 0)
 		if last_pos > 0:
 			self._send_command(f"seek {self.alias} to {last_pos}")
+		self._is_loaded = True
 		return True
 
 	def play(self):
+		if not self._is_loaded:
+			return
 		if self._is_wav:
 			self._set_wave_volume(self._volume)
 		else:
@@ -121,10 +124,12 @@ class AudioPlayer:
 		self._send_command(f"play {self.alias}")
 
 	def stop(self, current_file=None):
+		if not self._is_loaded:
+			return
 		if current_file and self._current_file_path == current_file:
 			pos = self._send_command(f"status {self.alias} position")
 			try:
-				if pos.isdigit():
+				if pos and pos.isdigit():
 					self.data["positions"][current_file] = int(pos)
 					self.data["bookmarks"][current_file] = self._bookmarks
 			except:
@@ -140,9 +145,10 @@ class AudioPlayer:
 		self._bookmarks = []
 		self._current_bookmark_index = -1
 		self._current_file_path = None
+		self._is_loaded = False
 
 	def is_playing(self):
-		if not self._current_file_path:
+		if not self._is_loaded or not self._current_file_path:
 			return False
 		status = self._send_command(f"status {self.alias} mode")
 		return "playing" in status.lower()
@@ -162,6 +168,8 @@ class AudioPlayer:
 		self._current_bookmark_index = -1
 
 	def restart_current(self):
+		if not self._is_loaded:
+			return
 		self._send_command(f"seek {self.alias} to 0")
 		if self._is_wav:
 			self._set_wave_volume(self._volume)
@@ -170,6 +178,8 @@ class AudioPlayer:
 		self._send_command(f"play {self.alias}")
 
 	def toggle_pause(self):
+		if not self._is_loaded:
+			return
 		status = self._send_command(f"status {self.alias} mode")
 		if "playing" in status.lower():
 			self._send_command(f"pause {self.alias}")
@@ -181,6 +191,8 @@ class AudioPlayer:
 			self._send_command(f"play {self.alias}")
 
 	def seek(self, seconds):
+		if not self._is_loaded:
+			return
 		curr = self._send_command(f"status {self.alias} position")
 		try:
 			new_pos = int(curr) + (seconds * 1000)
@@ -194,6 +206,8 @@ class AudioPlayer:
 			pass
 
 	def seek_to(self, ms):
+		if not self._is_loaded:
+			return
 		try:
 			self._send_command(f"seek {self.alias} to {max(0, ms)}")
 			if self._is_wav:
@@ -215,21 +229,25 @@ class AudioPlayer:
 			self._set_wave_volume(self._volume)
 
 	def get_position(self):
+		if not self._is_loaded:
+			return None
 		pos = self._send_command(f"status {self.alias} position")
 		try:
-			return int(pos)
+			return int(pos) if pos else None
 		except:
 			return None
 
 	def get_total_length(self):
+		if not self._is_loaded:
+			return None
 		length = self._send_command(f"status {self.alias} length")
 		try:
-			return int(length)
+			return int(length) if length else None
 		except:
 			return None
 
 	def add_bookmark(self, position_ms):
-		if position_ms is None:
+		if position_ms is None or not self._is_loaded:
 			tones.beep(200, 50)
 			return
 		
@@ -244,7 +262,7 @@ class AudioPlayer:
 		tones.beep(1200, 30)
 
 	def go_to_next_bookmark(self):
-		if not self._bookmarks:
+		if not self._bookmarks or not self._is_loaded:
 			return False
 		if self._current_bookmark_index + 1 < len(self._bookmarks):
 			self._current_bookmark_index += 1
@@ -255,7 +273,7 @@ class AudioPlayer:
 		return False
 
 	def go_to_prev_bookmark(self):
-		if not self._bookmarks:
+		if not self._bookmarks or not self._is_loaded:
 			return False
 		if self._current_bookmark_index - 1 >= 0:
 			self._current_bookmark_index -= 1

@@ -30,36 +30,50 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		self.target_folder_path = None
 		self.last_tap_time = 0
 		self.tap_count = 0
+		self._pending_tap_action = None
 
 	def getScript(self, gesture):
 		if not self.inLayeredMode:
 			return super().getScript(gesture)
 
-		key = gesture.displayName.lower()
-		mapping = {
-			"escape": self.script_hideLayerMode,
-			"q": self.script_hideLayerMode,
-			"space": self.script_togglePause,
-			"c": self.script_togglePause,
-			"right arrow": self.script_seekForward,
-			"left arrow": self.script_seekBackward,
-			"page up": self.script_volUp,
-			"page down": self.script_volDown,
-			"up arrow": self.script_prevFile,
-			"down arrow": self.script_nextFile,
-			"x": self.script_restartFile,
-			"z": self.script_clearData,
-			"w": self.script_currentTime,
-			"e": self.script_seekToLast10,
-			"r": self.script_remainingTime,
-			"t": self.script_totalTime,
-			"b": self.script_setBookmark,
-			"ctrl+b": self.script_nextBookmark,
-			"shift+b": self.script_prevBookmark
-		}
-
-		if key in mapping:
-			return mapping[key]
+		# Use gesture identifiers (language-independent) instead of displayName
+		for identifier in gesture.identifiers:
+			identifier_lower = identifier.lower()
+			
+			if identifier_lower in ("kb:escape", "kb:q"):
+				return self.script_hideLayerMode
+			elif identifier_lower in ("kb:space", "kb:c"):
+				return self.script_togglePause
+			elif identifier_lower == "kb:rightarrow":
+				return self.script_seekForward
+			elif identifier_lower == "kb:leftarrow":
+				return self.script_seekBackward
+			elif identifier_lower == "kb:pageup":
+				return self.script_volUp
+			elif identifier_lower == "kb:pagedown":
+				return self.script_volDown
+			elif identifier_lower == "kb:uparrow":
+				return self.script_prevFile
+			elif identifier_lower == "kb:downarrow":
+				return self.script_nextFile
+			elif identifier_lower == "kb:x":
+				return self.script_restartFile
+			elif identifier_lower == "kb:z":
+				return self.script_clearData
+			elif identifier_lower == "kb:w":
+				return self.script_currentTime
+			elif identifier_lower == "kb:e":
+				return self.script_seekToLast10
+			elif identifier_lower == "kb:r":
+				return self.script_remainingTime
+			elif identifier_lower == "kb:t":
+				return self.script_totalTime
+			elif identifier_lower == "kb:b":
+				return self.script_setBookmark
+			elif identifier_lower == "kb:ctrl+b":
+				return self.script_nextBookmark
+			elif identifier_lower == "kb:shift+b":
+				return self.script_prevBookmark
 
 		return super().getScript(gesture)
 
@@ -81,10 +95,13 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 
 	def _get_audio_files_in_folder(self, folder):
 		files = []
-		for f in os.listdir(folder):
-			if os.path.splitext(f)[1].lower() in SUPPORTED_EXTENSIONS:
-				files.append(f)
-		return sorted(files)
+		try:
+			for f in os.listdir(folder):
+				if os.path.splitext(f)[1].lower() in SUPPORTED_EXTENSIONS:
+					files.append(f)
+			return sorted(files)
+		except:
+			return []
 
 	def _perform_enter_layer(self, path, window_handle, folder_path):
 		logHandler.log.debug(f"Listen: Attempting to load {path}")
@@ -95,10 +112,10 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 			self.target_folder_path = folder_path
 			self.player.play()
 			tones.beep(800, 40)
-			ui.message("Listen Mode Active")
+			ui.message(_("Listen Mode Active"))
 		else:
 			logHandler.log.warning(f"Listen: Failed to load {path}")
-			ui.message("Error loading file")
+			ui.message(_("Error loading file"))
 
 	def event_gainFocus(self, obj, nextHandler):
 		if not self.current_file_path or not self.target_window_handle:
@@ -111,14 +128,17 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 			
 			if is_target_window and not self.inLayeredMode:
 				self.inLayeredMode = True
+				if self.player and self.current_file_path:
+					if not self.player.is_playing():
+						self.player.play()
 				tones.beep(800, 40)
-				ui.message("Listen Mode Active")
+				ui.message(_("Listen Mode Active"))
 			elif not is_target_window and self.inLayeredMode:
 				self.inLayeredMode = False
 				tones.beep(200, 40)
-				ui.message("Listen Mode Hidden")
-		except:
-			pass
+				ui.message(_("Listen Mode Hidden"))
+		except Exception as e:
+			logHandler.log.debug(f"event_gainFocus error: {e}")
 		nextHandler()
 
 	def _execute_tap_action(self):
@@ -128,14 +148,15 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 				if path:
 					self._perform_enter_layer(path, window_handle, folder_path)
 				else:
-					ui.message("Select Audio File")
+					ui.message(_("Select Audio File"))
 			else:
 				if not self.inLayeredMode:
 					self.inLayeredMode = True
-					if not self.player.is_playing():
-						self.player.play()
+					if self.player and self.current_file_path:
+						if not self.player.is_playing():
+							self.player.play()
 					tones.beep(800, 40)
-					ui.message("Listen Mode Active")
+					ui.message(_("Listen Mode Active"))
 				else:
 					tones.beep(600, 40)
 		
@@ -147,9 +168,10 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 			self.target_window_handle = None
 			self.target_folder_path = None
 			tones.beep(150, 40)
-			ui.message("Permanently Stopped")
+			ui.message(_("Permanently Stopped"))
 		
 		self.tap_count = 0
+		self._pending_tap_action = None
 
 	@scriptHandler.script(
 		description="Listen Mode (Single: Show/Hide, Double: Permanent Stop)",
@@ -165,11 +187,17 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		self.tap_count += 1
 		self.last_tap_time = current_time
 		
-		wx.CallLater(int(TAP_THRESHOLD * 1000), self._execute_tap_action)
+		if self._pending_tap_action:
+			try:
+				self._pending_tap_action.Stop()
+			except:
+				pass
+		
+		self._pending_tap_action = wx.CallLater(int(TAP_THRESHOLD * 1000), self._execute_tap_action)
 
 	@scriptHandler.script(
 		description="Hide Listen Mode (Audio continues)",
-		category="ListenMode",
+		category="Listen",
 		gesture="kb:q"
 	)
 	def script_hideLayerMode(self, gesture):
@@ -180,43 +208,88 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		if self.inLayeredMode:
 			self.inLayeredMode = False
 			tones.beep(200, 40)
-			ui.message("Listen Mode Hidden")
+			ui.message(_("Listen Mode Hidden"))
 		else:
 			gesture.send()
 
+	@scriptHandler.script(
+		description="Toggle play/pause",
+		category="Listen",
+		gesture=None
+	)
 	def script_togglePause(self, gesture):
 		if self.player and self.current_file_path:
 			self.player.toggle_pause()
 
+	@scriptHandler.script(
+		description="Seek forward 10 seconds",
+		category="Listen",
+		gesture=None
+	)
 	def script_seekForward(self, gesture):
 		if self.player and self.current_file_path:
 			self.player.seek(10)
 
+	@scriptHandler.script(
+		description="Seek backward 10 seconds",
+		category="Listen",
+		gesture=None
+	)
 	def script_seekBackward(self, gesture):
 		if self.player and self.current_file_path:
 			self.player.seek(-10)
 
+	@scriptHandler.script(
+		description="Increase volume",
+		category="Listen",
+		gesture=None
+	)
 	def script_volUp(self, gesture):
 		if self.player and self.current_file_path:
 			self.player.change_volume(2)
 
+	@scriptHandler.script(
+		description="Decrease volume",
+		category="Listen",
+		gesture=None
+	)
 	def script_volDown(self, gesture):
 		if self.player and self.current_file_path:
 			self.player.change_volume(-2)
 
+	@scriptHandler.script(
+		description="Restart current file",
+		category="Listen",
+		gesture=None
+	)
 	def script_restartFile(self, gesture):
 		if self.player and self.current_file_path:
 			self.player.restart_current()
 
+	@scriptHandler.script(
+		description="Clear playback history",
+		category="Listen",
+		gesture=None
+	)
 	def script_clearData(self, gesture):
 		if self.player and self.current_file_path:
 			self.player.clear_positions()
 			tones.beep(400, 50)
-			ui.message("History Cleared")
+			ui.message(_("History Cleared"))
 
+	@scriptHandler.script(
+		description="Previous audio file",
+		category="Listen",
+		gesture=None
+	)
 	def script_prevFile(self, gesture):
 		self._navigate(-1)
 
+	@scriptHandler.script(
+		description="Next audio file",
+		category="Listen",
+		gesture=None
+	)
 	def script_nextFile(self, gesture):
 		self._navigate(1)
 
@@ -226,10 +299,13 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		folder = os.path.dirname(self.current_file_path)
 		files = self._get_audio_files_in_folder(folder)
 		if not files:
+			ui.message(_("No audio files in folder"))
 			return
 		try:
-			was_playing = self.player.is_playing()
-			self.player.stop(self.current_file_path)
+			was_playing = False
+			if self.player:
+				was_playing = self.player.is_playing()
+				self.player.stop(self.current_file_path)
 			current_name = os.path.basename(self.current_file_path)
 			if current_name in files:
 				idx = files.index(current_name)
@@ -237,14 +313,19 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 				idx = 0
 			new_idx = (idx + delta) % len(files)
 			new_path = os.path.join(folder, files[new_idx])
-			if self.player.load(new_path):
+			if self.player and self.player.load(new_path):
 				self.current_file_path = new_path
 				if was_playing or self.inLayeredMode:
 					self.player.play()
 				ui.message(files[new_idx])
-		except:
-			pass
+		except Exception as e:
+			logHandler.log.debug(f"Navigate error: {e}")
 
+	@scriptHandler.script(
+		description="Show current playback position",
+		category="Listen",
+		gesture=None
+	)
 	def script_currentTime(self, gesture):
 		if self.player and self.current_file_path:
 			pos = self.player.get_position()
@@ -253,6 +334,11 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 			else:
 				tones.beep(200, 50)
 
+	@scriptHandler.script(
+		description="Show remaining time",
+		category="Listen",
+		gesture=None
+	)
 	def script_remainingTime(self, gesture):
 		if self.player and self.current_file_path:
 			pos = self.player.get_position()
@@ -263,6 +349,11 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 			else:
 				tones.beep(200, 50)
 
+	@scriptHandler.script(
+		description="Show total duration",
+		category="Listen",
+		gesture=None
+	)
 	def script_totalTime(self, gesture):
 		if self.player and self.current_file_path:
 			total = self.player.get_total_length()
@@ -271,6 +362,11 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 			else:
 				tones.beep(200, 50)
 
+	@scriptHandler.script(
+		description="Seek to last 10 seconds",
+		category="Listen",
+		gesture=None
+	)
 	def script_seekToLast10(self, gesture):
 		if self.player and self.current_file_path:
 			total = self.player.get_total_length()
@@ -280,16 +376,31 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 			else:
 				tones.beep(200, 50)
 
+	@scriptHandler.script(
+		description="Add bookmark at current position",
+		category="Listen",
+		gesture=None
+	)
 	def script_setBookmark(self, gesture):
 		if self.player and self.current_file_path:
 			current_pos = self.player.get_position()
 			self.player.add_bookmark(current_pos)
 
+	@scriptHandler.script(
+		description="Go to next bookmark",
+		category="Listen",
+		gesture=None
+	)
 	def script_nextBookmark(self, gesture):
 		if self.player and self.current_file_path:
 			if not self.player.go_to_next_bookmark():
 				tones.beep(100, 100)
 
+	@scriptHandler.script(
+		description="Go to previous bookmark",
+		category="Listen",
+		gesture=None
+	)
 	def script_prevBookmark(self, gesture):
 		if self.player and self.current_file_path:
 			if not self.player.go_to_prev_bookmark():
@@ -306,6 +417,11 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 			return f"{minutes:02d}:{seconds:02d}"
 
 	def terminate(self):
+		if self._pending_tap_action:
+			try:
+				self._pending_tap_action.Stop()
+			except:
+				pass
 		if self.player:
 			self.player.stop(self.current_file_path)
 		super().terminate()

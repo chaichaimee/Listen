@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Listen NVDA Add-on</title>
+<style>
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    padding: 20px;
+    background-color: #f4f4f4;
+}
+.container {
+    max-width: 800px;
+    margin: auto;
+    background: #fff;
+    padding: 20px 40px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+h1, h2, h3 {
+    text-align: center;
+}
+b {
+    font-weight: bold;
+}
+.section {
+    margin-bottom: 30px;
+}
+.nvda-logo {
+    display: block;
+    margin: 0 auto 20px;
+    width: 120px;
+    height: auto;
+}
+.hotkey {
+    background: #f8f9fa;
+    border-left: 4px solid #3498db;
+    padding: 15px;
+    margin: 15px 0;
+    border-radius: 0 4px 4px 0;
+}
+.tap-explanation {
+    background: #e8f4fc;
+    padding: 15px;
+    border-radius: 5px;
+    margin: 10px 0;
+}
+.feature-item {
+    margin: 15px 0;
+    padding-left: 10px;
+}
+.note {
+    background: #fff3cd;
+    border-left: 4px solid #ffc107;
+    padding: 12px;
+    margin: 15px 0;
+    border-radius: 0 4px 4px 0;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<div class="section">
+    <img src="https://www.nvaccess.org/files/nvda/documentation/userGuide/images/nvda.ico" alt="NVDA Logo" class="nvda-logo">
+    <h1>Listen</h1>
+
+<br>
+
+<p style="text-align: center;">The ultimate seamless audio companion designed to let you preview, control, and navigate your audio playlist effortlessly from anywhere on your system.</div>
+
+<br>
+
+<div class="section">
+    <p style="text-align: center;"><b>author:</b> chai chaimee</p>
+    <p style="text-align: center;"><b>url:</b> https://github.com/chaichaimee/Listen</p>
+</div>
+
+<hr>
+
+<div class="section">
+    <h2>Description</h2>
+    <p><b>Listen</b> transforms the way you interact with audio files on your computer. Instead of opening bulky, distracting media players every time you want to review an audio track, Listen embeds a powerful, lightweight background audio engine directly into your NVDA screen reader. Whether you are dealing with massive folders of sound effects, lectures, music, or recordings, this add-on gives you the freedom to control your audio on the fly without ever losing your place or interrupting your workflow.</p>
+</div>
+        
+<br>
+
+<div class="section">
+    <h2>Hot Keys</h2>
+    <p>The primary gateway to managing your audio is the Master Control Key. This key behaves differently depending on how many times you press it in quick succession:</p>
+    
+    <div class="tap-explanation">
+        <p><b>Master Control Key: Alt + Windows + L</b></p>
+        <ul>
+            <li><b>Single Tap:</b> Activates Listen Mode on a selected file, or instantly wakes up/brings back control of your background music from anywhere on your PC.</li>
+            <li><b>Double Tap:</b> Permanently stops the current audio, saves your position, and completely closes the media layer.</li>
+        </ul>
+    </div>
+    
+    <br>
+    <h3>Listen Mode Control Map (Active Only Inside Listen Mode)</h3>
+    <p>Once Listen Mode is active, your keyboard temporarily transforms into an interactive media console. The following dedicated single-key commands become available:</p>
+    
+    <div class="hotkey">
+        <ul>
+            <li><b>Escape or Q:</b> Hides the Listen Control Mode so you can resume normal computer tasks while the audio keeps playing smoothly in the background.</li>
+            <li><b>Spacebar or C:</b> Toggle Play / Pause.</li>
+            <li><b>Right Arrow:</b> Fast forward by 10 seconds.</li>
+            <li><b>Left Arrow:</b> Rewind by 10 seconds.</li>
+            <li><b>Page Up:</b> Increase volume.</li>
+            <li><b>Page Down:</b> Decrease volume.</li>
+            <li><b>Up Arrow:</b> Skip to the Previous audio file in the folder.</li>
+            <li><b>Down Arrow:</b> Skip to the Next audio file in the folder.</li>
+            <li><b>X:</b> Restart the current track from the very beginning.</li>
+            <li><li><b>Z:</b> Clear your entire playback history and saved positions.</li>
+            <li><b>W:</b> Announce the current playback position.</li>
+            <li><b>R:</b> Announce the remaining time left on the track.</li>
+            <li><b>T:</b> Announce the total duration of the track.</li>
+            <li><b>E:</b> Instantly skip ahead to the last 10 seconds of the audio track.</li>
+            <li><b>B:</b> Drop a custom smart bookmark at the current playback timestamp.</li>
+            <li><b>Ctrl + B:</b> Jump directly forward to your next saved bookmark.</li>
+            <li><b>Shift + B:</b> Jump directly backward to your previous saved bookmark.</li>
+        </ul>
+    </div>
+</div>
+
+<br>
+
+<div class="section">
+    <h2>Features</h2>
+    
+    <div class="feature-item">
+        <h3>1. The Zero-Interruption Folder Workflow</h3>
+        <p>Managing massive audio collections can be exhausting when you have to open and close files one by one. Listen completely fixes this hassle by grouping entire folders automatically.</p>
+        <p><b>Step-by-Step Guide:</b></p>
+        <ol>
+            <li>Open File Explorer and browse to any folder containing audio tracks.</li>
+            <li>Focus on any supported audio file (such as MP3, WAV, WMA, M4A, FLAC, AAC, OGG, OPUS, or MIDI).</li>
+            <li>Press <b>Alt + Windows + L (Single Tap)</b>. You will hear a sharp confirmation tone and NVDA will say <i>"Listen Mode Active"</i>. Your audio starts playing immediately.</li>
+            <li>Want to hear the next track? Simply press the <b>Down Arrow</b>. Want to go back? Press the <b>Up Arrow</b>. Listen will swap files instantly while keeping your focus comfortably right inside your folder.</li>
+        </ol>
+    </div>
+    
+    <br>
+    
+    <div class="feature-item">
+        <h3>2. Ambient Playback and Intelligent Window Hiding</h3>
+        <p>Need to take notes or read a document while listening to an audio file? Listen lets you put the playback system into the background without interrupting the sound.</p>
+        <p><b>Step-by-Step Guide:</b></p>
+        <ol>
+            <li>While listening to a track inside Listen Mode, press <b>Q</b> or <b>Escape</b>. You will hear a lower tone and NVDA will announce <i>"Listen Mode Hidden"</i>.</li>
+            <li>Your audio continues playing seamlessly, but your keyboard is instantly released back to normal, allowing you to type, navigate webs, or fill out forms.</li>
+            <li>Alternatively, simply pressing <b>Alt + Tab</b> to look at another application window will automatically hide Listen Mode, putting safety locks on your media hotkeys so you never press them by accident.</li>
+        </ol>
+    </div>
+    
+    <br>
+    
+    <div class="feature-item">
+        <h3>3. Global Remote Control From Anywhere</h3>
+        <p>What if you are working deep inside a Word document or a web browser, and you want to pause, rewind, or skip to the next audio track without navigating back to your original folder?</p>
+        <p><b>Step-by-Step Guide:</b></p>
+        <ol>
+            <li>No matter what program or window you are currently using, press <b>Alt + Windows + L (Single Tap)</b>.</li>
+            <li>Listen instantly wakes up and reconnects your keyboard directly to your running audio file. You will hear the high-pitched tone and NVDA will say <i>"Listen Mode Active"</i>.</li>
+            <li>You can now immediately use any of the media control keys (e.g., Spacebar to pause, Left/Right Arrows to skip through time, or Up/Down Arrows to swap tracks inside that remote folder).</li>
+            <li>Once you are done adjusting, press <b>Q</b> or <b>Escape</b> to immediately lock your keys back to your document text. You never have to interrupt your visual focus or change your working window.</li>
+        </ol>
+    </div>
+    
+    <br>
+    
+    <div class="feature-item">
+        <h3>4. Smart Memory: Automatic Resume & History Management</h3>
+        <p>Never lose your spot again. Listen acts like an intelligent bookkeeper that watches over your position and audio preferences.</p>
+        <p><b>Step-by-Step Guide:</b></p>
+        <ol>
+            <li>If you need to stop your audio entirely, press <b>Alt + Windows + L twice (Double Tap)</b>. You will hear a low buzz and NVDA will report <i>"Permanently Stopped"</i>.</li>
+            <li>The add-on instantly remembers your exact second in that track, along with your volume settings.</li>
+            <li>The next time you return to that file and trigger it with a single tap, it will pick up right where you left off.</li>
+            <li>If your history gets too cluttered or you want to review tracks fresh from the start, press <b>Z</b> while in active Listen Mode to wipe your playback memory clean instantly.</li>
+        </ol>
+    </div>
+    
+    <br>
+    
+    <div class="feature-item">
+        <h3>5. Precise Timestamp Bookmarking</h3>
+        <p>When reviewing long recordings or lectures, dropping anchors at vital spots is essential. Listen lets you save unlimited custom points within any track.</p>
+        <p><b>Step-by-Step Guide:</b></p>
+        <ol>
+            <li>While listening to an active file, press <b>B</b> at any exact moment you hear something important. A chime will play, letting you know your bookmark is saved.</li>
+            <li>To quickly scan through your important highlights, press <b>Ctrl + B</b> to fly forward to the next bookmark, or <b>Shift + B</b> to travel backward to previous bookmarks.</li>
+        </ol>
+    </div>
+</div>
+    
+<br><br>
+<h2>Support Me</h2>
+    <p>If this tool has made your life easier, consider fueling the next update with a small donation.</p>
+
+<br>
+
+<p>
+  <a href="https://buy.stripe.com/dRm9AU1xQ3Ds22N6VK1VK01">
+    <img src="https://img.shields.io/badge/Donate-Support%20Me-blue?style=for-the-badge&logo=stripe" alt="Support me">
+  </a>
+</p>
+<br>
+
+
+<p>Your support means the world. Let's build something great together</p>
+
+<br>
+
+  <div class="footer-note">
+<p>&copy; 2026 Chai Chaimee NVDA Add-on Released under GNU General Public License.</p>
+</div>
+
+</div>
+</body>
+</html>

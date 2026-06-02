@@ -1,0 +1,132 @@
+<div align="center">
+  <img src="https://www.nvaccess.org/files/nvda/documentation/userGuide/images/nvda.ico" alt="NVDA Logo" width="120">
+  <h1>Listen</h1>
+</div>
+
+<br>
+
+<p align="center">Votre compagnon audio fluide et ultime, conçu pour vous permettre de préécouter, contrôler et parcourir votre liste de lecture audio sans effort, où que vous soyez sur votre système.</p>
+
+<br>
+
+<p align="center"><b>Auteur :</b> chai chaimee<br><b>URL:</b> https://github.com/chaichaimee/Listen</p>
+
+---
+
+## Description
+<b>Listen</b> transforme radicalement votre façon d'interagir avec les fichiers audio sur votre ordinateur. Au lieu d'ouvrir des lecteurs multimédias lourds et distrayants chaque fois que vous voulez vérifier une piste audio, Listen intègre un moteur audio d'arrière-plan puissant et léger directement dans votre lecteur d'écran NVDA. Que vous gériez d'immenses dossiers d'effets sonores, de cours, de musique ou d'enregistrements, cette extension vous donne la liberté de contrôler votre audio à la volée, sans jamais perdre votre position ni interrompre votre flux de travail.
+
+<br>
+
+## Touches de raccourci
+La passerelle principale pour gérer votre audio est la Touche de Contrôle Maître. Cette touche se comporte différemment selon le nombre de pressions successives rapides :
+
+<blockquote>
+  <p><b>Touche de Contrôle Maître : Alt + Windows + L</b></p>
+  <ul>
+    <li><b>Simple pression :</b> Active le Mode Listen sur un fichier sélectionné, ou réactive/reprend instantanément le contrôle de votre musique en arrière-plan depuis n'importe où sur votre PC.</li>
+    <li><b>Double pression :</b> Arrête définitivement l'audio en cours, sauvegarde votre position et ferme complètement la couche multimédia.</li>
+  </ul>
+</blockquote>
+
+<br>
+
+### Carte de contrôle du Mode Listen (Actif uniquement en Mode Listen)
+Une fois le Mode Listen activé, votre clavier se transforme temporairement en une console multimédia interactive. Les commandes dédiées à une seule touche suivantes deviennent disponibles :
+
+<blockquote>
+  <ul>
+    <li><b>Échap ou Q :</b> Masque le Mode de Contrôle Listen afin que vous puissiez reprendre vos tâches informatiques normales pendant que l'audio continue de jouer de manière fluide en arrière-plan.</li>
+    <li><b>Barre d'espace ou C :</b> Activer / Suspendre la lecture.</li>
+    <li><b>Flèche droite :</b> Avance rapide de 10 secondes.</li>
+    <li><b>Flèche gauche :</b> Retour rapide de 10 secondes.</li>
+    <li><b>Page précédente (Page Up) :</b> Augmenter le volume.</li>
+    <li><b>Page suivante (Page Down) :</b> Diminuer le volume.</li>
+    <li><b>Flèche haut :</b> Passer au fichier audio précédent dans le dossier.</li>
+    <li><b>Flèche bas :</b> Passer au fichier audio suivant dans le dossier.</li>
+    <li><b>X :</b> Recommencer la piste actuelle depuis le tout début.</li>
+    <li><b>Z :</b> Effacer tout votre historique de lecture et les positions sauvegardées.</li>
+    <li><b>W :</b> Annoncer la position de lecture actuelle.</li>
+    <li><b>R :</b> Annoncer le temps restant sur la piste.</li>
+    <li><b>T :</b> Annoncer la durée totale de la piste.</li>
+    <li><b>E :</b> Sauter instantanément aux 10 dernières secondes de la piste audio.</li>
+    <li><b>B :</b> Placer un signet intelligent personnalisé à l'horodatage de lecture actuel.</li>
+    <li><b>Ctrl + B :</b> Sauter directement vers l'avant jusqu'au prochain signet sauvegardé.</li>
+    <li><b>Maj + B :</b> Sauter directement vers l'arrière jusqu'au signet sauvegardé précédent.</li>
+  </ul>
+</blockquote>
+
+<br>
+
+## Fonctionnalités
+
+### 1. Flux de travail par dossier sans interruption
+La gestion d'immenses collections audio peut être épuisante lorsque vous devez ouvrir et fermer les fichiers un par un. Listen résout complètement ce problème en regroupant automatiquement des dossiers entiers.
+
+<b>Guide étape par étape :</b>
+1. Ouvrez l'Explorateur de fichiers et accédez à n'importe quel dossier contenant des pistes audio.
+2. Mettez le focus sur n'importe quel fichier audio pris en charge (tel que MP3, WAV, WMA, M4A, FLAC, AAC, OGG, OPUS ou MIDI).
+3. Appuyez sur <b>Alt + Windows + L (Simple pression)</b>. Vous entendrez une tonalité de confirmation aiguë et NVDA dira <i>"Mode Listen actif"</i>. Votre audio commence à jouer immédiatement.
+4. Vous voulez entendre la piste suivante ? Appuyez simplement sur la <b>Flèche bas</b>. Vous voulez revenir en arrière ? Appuyez sur la <b>Flèche haut</b>. Listen changera de fichier instantanément tout en maintenant confortablement votre focus juste à l'intérieur de votre dossier.
+
+<br>
+
+### 2. Lecture d'ambiance et masquage intelligent des fenêtres
+Besoin de prendre des notes ou de lire un document tout en écoutant un fichier audio ? Listen vous permet de placer le système de lecture en arrière-plan sans interrompre le son.
+
+<b>Guide étape par étape :</b>
+1. Tout en écoutant une piste en Mode Listen, appuyez sur <b>Q</b> ou <b>Échap</b>. Vous entendrez une tonalité plus grave et NVDA annoncera <i>"Mode Listen masqué"</i>.
+2. Votre audio continue de jouer de manière fluide, mais votre clavier est instantanément libéré pour revenir à la normale, vous permettant de taper, de naviguer sur le Web ou de remplir des formulaires.
+3. Alternativement, le simple fait d'appuyer sur <b>Alt + Tab</b> pour regarder une autre fenêtre d'application masquera automatiquement le Mode Listen, verrouillant par sécurité vos raccourcis multimédias pour que vous n'appuyiez jamais dessus par accident.
+
+<br>
+
+### 3. Télécommande globale depuis n'importe où
+Que se passe-t-il si vous travaillez activement dans un document Word ou un navigateur Web et que vous souhaitez mettre en pause, reculer ou passer à la piste audio suivante sans revenir à votre dossier d'origine ?
+
+<b>Guide étape par étape :</b>
+1. Peu importe le programme ou la fenêtre que vous utilisez actuellement, appuyez sur <b>Alt + Windows + L (Simple pression)</b>.
+2. Listen se réveille instantanément et reconnecte votre clavier directement à votre fichier audio en cours de lecture. Vous entendrez la tonalité aiguë et NVDA dira <i>"Mode Listen actif"</i>.
+3. Vous pouvez maintenant utiliser immédiatement l'une des touches de contrôle multimédia (par exemple, la Barre d'espace pour mettre en pause, les Flèches gauche/droite pour naviguer dans le temps, ou les Flèches haut/bas pour changer de piste dans ce dossier distant).
+4. Une fois les réglages terminés, appuyez sur <b>Q</b> ou <b>Échap</b> pour reverrouiller immédiatement vos touches sur le texte de votre document. Vous n'avez jamais à interrompre votre focus visuel ni à changer de fenêtre de travail.
+
+<br>
+
+### 4. Mémoire intelligente : Reprise automatique et gestion de l'historique
+Ne perdez plus jamais votre position de lecture. Listen agit comme un intendant intelligent qui veille sur votre position et vos préférences audio.
+
+<b>Guide étape par étape :</b>
+1. Si vous devez arrêter complètement votre audio, appuyez sur <b>Alt + Windows + L deux fois (Double pression)</b>. Vous entendrez un bourdonnement grave et NVDA signalera <i>"Arrêté définitivement"</i>.
+2. L'extension se souvient instantanément de la seconde exacte de cette piste, ainsi que de vos paramètres de volume.
+3. La prochaine fois que vous reviendrez sur ce fichier et le déclencherez d'une simple pression, il reprendra exactement là où vous vous étiez arrêté.
+4. Si votre historique devient trop encombré ou si vous souhaitez revoir les pistes depuis le début, appuyez sur <b>Z</b> lorsque vous êtes en Mode Listen actif pour effacer instantanément votre mémoire de lecture.
+
+<br>
+
+### 5. Balisage précis par horodatage (Signets)
+Lors de la réécoute de longs enregistrements ou de cours, il est essentiel de jeter l'ancre aux endroits vitaux. Listen vous permet de sauvegarder un nombre illimité de points personnalisés dans n'importe quel morceau.
+
+<b>Guide étape par étape :</b>
+1. Tout en écoutant un fichier actif, appuyez sur <b>B</b> à l'instant précis où vous entendez quelque chose d'important. Un carillon retentira pour vous indiquer que votre signet a été enregistré.
+2. Pour parcourir rapidement vos points forts importants, appuyez sur <b>Ctrl + B</b> pour avancer vers le signet suivant, ou sur <b>Maj + B</b> pour reculer vers les signets précédents.
+
+<br><br>
+
+## Soutenez-moi
+Si cet outil a facilité votre vie, pensez à soutenir la prochaine mise à jour via un petit don.
+
+<br>
+
+<p>
+  <a href="https://buy.stripe.com/dRm9AU1xQ3Ds22N6VK1VK01">
+    <img src="https://img.shields.io/badge/Donate-Support%20Me-blue?style=for-the-badge&logo=stripe" alt="Support me">
+  </a>
+</p>
+
+<br>
+
+Votre soutien représente tout pour moi. Construisons quelque chose de grand ensemble.
+
+<br>
+
+<p align="center">&copy; 2026 Chai Chaimee Extension NVDA Publiée sous la licence publique générale GNU.</p>
