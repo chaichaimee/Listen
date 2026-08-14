@@ -1,11 +1,15 @@
-# audio_engine.py
+# Copyright (C) 2026 Chai Chaimee
+# Licensed under GNU General Public License. See COPYING.txt for details.
 
 import os
 import json
 import globalVars
 import logHandler
 import tones
+import core
 from ctypes import windll, create_unicode_buffer, byref, c_uint
+
+BOOKMARK_CHIME_GAP_MS = 90
 
 class AudioPlayer:
 	def __init__(self):
@@ -29,13 +33,14 @@ class AudioPlayer:
 			try:
 				with open(self.config_path, 'w', encoding='utf-8') as f:
 					json.dump(default, f, indent=4)
-			except:
-				pass
+			except Exception as e:
+				logHandler.log.debug(f"Listen: Failed to create default config: {e}")
 			return default
 		try:
 			with open(self.config_path, 'r', encoding='utf-8') as f:
 				return json.load(f)
-		except:
+		except Exception as e:
+			logHandler.log.debug(f"Listen: Failed to load config: {e}")
 			return {"volume": 40, "positions": {}, "bookmarks": {}}
 
 	def _send_command(self, cmd):
@@ -48,7 +53,6 @@ class AudioPlayer:
 
 	def _get_wave_volume(self):
 		try:
-			from ctypes import windll, c_uint, byref
 			vol = c_uint()
 			result = windll.winmm.waveOutGetVolume(0, byref(vol))
 			if result == 0:
@@ -59,12 +63,12 @@ class AudioPlayer:
 			else:
 				logHandler.log.debug(f"waveOutGetVolume failed with error {result}")
 				return None
-		except:
+		except Exception as e:
+			logHandler.log.debug(f"waveOutGetVolume exception: {e}")
 			return None
 
 	def _set_wave_volume(self, percent):
 		try:
-			from ctypes import windll, c_uint
 			if percent < 0:
 				percent = 0
 			if percent > 100:
@@ -74,8 +78,8 @@ class AudioPlayer:
 			result = windll.winmm.waveOutSetVolume(0, vol)
 			if result != 0:
 				logHandler.log.debug(f"waveOutSetVolume failed with error {result}")
-		except:
-			pass
+		except Exception as e:
+			logHandler.log.debug(f"waveOutSetVolume exception: {e}")
 
 	def load(self, path):
 		self._send_command(f"close {self.alias}")
@@ -132,7 +136,7 @@ class AudioPlayer:
 				if pos and pos.isdigit():
 					self.data["positions"][current_file] = int(pos)
 					self.data["bookmarks"][current_file] = self._bookmarks
-			except:
+			except Exception:
 				pass
 		self.data["volume"] = self._volume
 		self._send_command(f"stop {self.alias}")
@@ -157,8 +161,8 @@ class AudioPlayer:
 		try:
 			with open(self.config_path, 'w', encoding='utf-8') as f:
 				json.dump(self.data, f, indent=4)
-		except:
-			pass
+		except Exception as e:
+			logHandler.log.debug(f"Listen: Failed to save config: {e}")
 
 	def clear_positions(self):
 		self.data["positions"] = {}
@@ -202,7 +206,7 @@ class AudioPlayer:
 			else:
 				self.set_volume(self._volume)
 			self._send_command(f"play {self.alias}")
-		except:
+		except Exception:
 			pass
 
 	def seek_to(self, ms):
@@ -215,7 +219,7 @@ class AudioPlayer:
 			else:
 				self.set_volume(self._volume)
 			self._send_command(f"play {self.alias}")
-		except:
+		except Exception:
 			pass
 
 	def set_volume(self, value):
@@ -234,7 +238,7 @@ class AudioPlayer:
 		pos = self._send_command(f"status {self.alias} position")
 		try:
 			return int(pos) if pos else None
-		except:
+		except Exception:
 			return None
 
 	def get_total_length(self):
@@ -243,7 +247,7 @@ class AudioPlayer:
 		length = self._send_command(f"status {self.alias} length")
 		try:
 			return int(length) if length else None
-		except:
+		except Exception:
 			return None
 
 	def add_bookmark(self, position_ms):
@@ -259,7 +263,14 @@ class AudioPlayer:
 		self._bookmarks.append(position_ms)
 		self._bookmarks.sort()
 		self._current_bookmark_index = self._bookmarks.index(position_ms)
+		bookmarkCount = len(self._bookmarks)
 		tones.beep(1200, 30)
+		if bookmarkCount > 1:
+			# Deferred and pitched differently from the first chime so it is
+			# actually audible; two identical 1200Hz beeps fired back to
+			# back with no gap render as a single tone (or get clipped by
+			# the audio backend), which is why bookmark 2+ sounded silent.
+			core.callLater(BOOKMARK_CHIME_GAP_MS, tones.beep, 1500, 30)
 
 	def go_to_next_bookmark(self):
 		if not self._bookmarks or not self._is_loaded:

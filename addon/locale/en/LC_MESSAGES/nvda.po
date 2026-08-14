@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: Listen 2026.6.1\n"
+"Project-Id-Version: Listen 2026.8.5\n"
 "Report-Msgid-Bugs-To: chaicm75@gmail.com\n"
-"POT-Creation-Date: 2026-06-02 06:52+0700\n"
+"POT-Creation-Date: 2026-08-14 10:38+0700\n"
 "PO-Revision-Date: \n"
 "Last-Translator: chaiBot and Malee Yamazaki\n"
 "Language-Team: English\n"
@@ -12,33 +12,33 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: DevOn Addon\n"
 
-#: __init__.py:105
+#: __init__.py:160
 msgid "Error loading file"
 msgstr "Error loading file"
 
-#: __init__.py:265
+#: __init__.py:339
 msgid "History Cleared"
 msgstr "History Cleared"
 
-#: __init__.py:102
-#: __init__.py:122
-#: __init__.py:146
+#: __init__.py:157
+#: __init__.py:174
+#: __init__.py:220
 msgid "Listen Mode Active"
 msgstr "Listen Mode Active"
 
-#: __init__.py:126
-#: __init__.py:198
+#: __init__.py:178
+#: __init__.py:272
 msgid "Listen Mode Hidden"
 msgstr "Listen Mode Hidden"
 
-#: __init__.py:289
+#: __init__.py:363
 msgid "No audio files in folder"
 msgstr "No audio files in folder"
 
-#: __init__.py:158
+#: __init__.py:232
 msgid "Permanently Stopped"
 msgstr "Permanently Stopped"
 
-#: __init__.py:138
+#: __init__.py:146
 msgid "Select Audio File"
 msgstr "Select Audio File"

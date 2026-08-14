@@ -3,6 +3,7 @@
 # Licensed under GNU General Public License. See COPYING.txt for details.
 
 import os
+import threading
 import api
 import ui
 import scriptHandler
@@ -12,7 +13,9 @@ import tones
 import logHandler
 import core
 import time
+import winUser
 import wx
+import comtypes
 from . import audio_engine
 
 addonHandler.initTranslation()
@@ -31,49 +34,61 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		self.last_tap_time = 0
 		self.tap_count = 0
 		self._pending_tap_action = None
+		self._isResolvingExplorerTarget = False
+
+	# Layer key map is keyed on (mainKeyName, modifierNames) instead of the
+	# raw "kb:x" identifier string. Identifier strings are composed
+	# differently depending on the active NVDA keyboard settings layout and
+	# on whether the gesture carries a laptop/desktop qualifier, which was
+	# silently dropping every match in this method and letting the raw
+	# keystroke fall through to the focused Explorer window.
+	_LAYER_KEY_MAP = {
+		("escape", frozenset()): "script_hideLayerMode",
+		("q", frozenset()): "script_hideLayerMode",
+		("space", frozenset()): "script_togglePause",
+		("c", frozenset()): "script_togglePause",
+		("rightarrow", frozenset()): "script_seekForward",
+		("leftarrow", frozenset()): "script_seekBackward",
+		("pageup", frozenset()): "script_volUp",
+		("pagedown", frozenset()): "script_volDown",
+		("uparrow", frozenset()): "script_prevFile",
+		("downarrow", frozenset()): "script_nextFile",
+		("x", frozenset()): "script_restartFile",
+		("z", frozenset()): "script_clearData",
+		("w", frozenset()): "script_currentTime",
+		("e", frozenset()): "script_seekToLast10",
+		("r", frozenset()): "script_remainingTime",
+		("t", frozenset()): "script_totalTime",
+		("b", frozenset()): "script_setBookmark",
+		("b", frozenset({"control"})): "script_nextBookmark",
+		("b", frozenset({"shift"})): "script_prevBookmark",
+	}
+
+	# Bare modifier presses (e.g. holding Alt or Windows while tapping the
+	# other half of a combo) can never match _LAYER_KEY_MAP on their own and
+	# fire repeatedly under key auto-repeat, so they are filtered out before
+	# doing any dict work or logging.
+	_MODIFIER_ONLY_KEY_NAMES = frozenset({
+		"leftcontrol", "rightcontrol",
+		"leftshift", "rightshift",
+		"leftalt", "rightalt",
+		"leftwindows", "rightwindows",
+	})
 
 	def getScript(self, gesture):
 		if not self.inLayeredMode:
 			return super().getScript(gesture)
 
-		# Use gesture identifiers (language-independent) instead of displayName
-		for identifier in gesture.identifiers:
-			identifier_lower = identifier.lower()
-			
-			if identifier_lower in ("kb:escape", "kb:q"):
-				return self.script_hideLayerMode
-			elif identifier_lower in ("kb:space", "kb:c"):
-				return self.script_togglePause
-			elif identifier_lower == "kb:rightarrow":
-				return self.script_seekForward
-			elif identifier_lower == "kb:leftarrow":
-				return self.script_seekBackward
-			elif identifier_lower == "kb:pageup":
-				return self.script_volUp
-			elif identifier_lower == "kb:pagedown":
-				return self.script_volDown
-			elif identifier_lower == "kb:uparrow":
-				return self.script_prevFile
-			elif identifier_lower == "kb:downarrow":
-				return self.script_nextFile
-			elif identifier_lower == "kb:x":
-				return self.script_restartFile
-			elif identifier_lower == "kb:z":
-				return self.script_clearData
-			elif identifier_lower == "kb:w":
-				return self.script_currentTime
-			elif identifier_lower == "kb:e":
-				return self.script_seekToLast10
-			elif identifier_lower == "kb:r":
-				return self.script_remainingTime
-			elif identifier_lower == "kb:t":
-				return self.script_totalTime
-			elif identifier_lower == "kb:b":
-				return self.script_setBookmark
-			elif identifier_lower == "kb:ctrl+b":
-				return self.script_nextBookmark
-			elif identifier_lower == "kb:shift+b":
-				return self.script_prevBookmark
+		try:
+			mainKeyName = getattr(gesture, "mainKeyName", None)
+			if not mainKeyName or mainKeyName.lower() in self._MODIFIER_ONLY_KEY_NAMES:
+				return super().getScript(gesture)
+			modifierNames = frozenset(name.lower() for name in getattr(gesture, "modifierNames", ()))
+			scriptAttrName = self._LAYER_KEY_MAP.get((mainKeyName.lower(), modifierNames))
+			if scriptAttrName:
+				return getattr(self, scriptAttrName)
+		except AttributeError as e:
+			logHandler.log.error(f"Listen: getScript layer dispatch failed: {e}", exc_info=True)
 
 		return super().getScript(gesture)
 
@@ -90,7 +105,8 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 						if ext in SUPPORTED_EXTENSIONS:
 							return item.Path, fg.windowHandle, os.path.dirname(item.Path)
 			return None, None, None
-		except:
+		except Exception as e:
+			logHandler.log.debug(f"Listen: _get_path_from_explorer error: {e}")
 			return None, None, None
 
 	def _get_audio_files_in_folder(self, folder):
@@ -100,8 +116,34 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 				if os.path.splitext(f)[1].lower() in SUPPORTED_EXTENSIONS:
 					files.append(f)
 			return sorted(files)
-		except:
+		except Exception as e:
+			logHandler.log.debug(f"Listen: _get_audio_files_in_folder error: {e}")
 			return []
+
+	def _resolve_explorer_target_async(self):
+		if self._isResolvingExplorerTarget:
+			return
+		self._isResolvingExplorerTarget = True
+		workerThread = threading.Thread(target=self._explorer_lookup_worker, daemon=True)
+		workerThread.start()
+
+	def _explorer_lookup_worker(self):
+		comtypes.CoInitialize()
+		try:
+			path, windowHandle, folderPath = self._get_path_from_explorer()
+		except Exception as e:
+			logHandler.log.debug(f"Listen: _explorer_lookup_worker error: {e}")
+			path, windowHandle, folderPath = None, None, None
+		finally:
+			comtypes.CoUninitialize()
+		wx.CallAfter(self._handle_explorer_lookup_result, path, windowHandle, folderPath)
+
+	def _handle_explorer_lookup_result(self, path, window_handle, folder_path):
+		self._isResolvingExplorerTarget = False
+		if path:
+			self._perform_enter_layer(path, window_handle, folder_path)
+		else:
+			ui.message(_("Select Audio File"))
 
 	def _perform_enter_layer(self, path, window_handle, folder_path):
 		logHandler.log.debug(f"Listen: Attempting to load {path}")
@@ -117,38 +159,57 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 			logHandler.log.warning(f"Listen: Failed to load {path}")
 			ui.message(_("Error loading file"))
 
-	def event_gainFocus(self, obj, nextHandler):
+	def _update_layer_state(self, active_hwnd):
 		if not self.current_file_path or not self.target_window_handle:
-			nextHandler()
 			return
 
+		is_target_window = (active_hwnd == self.target_window_handle)
+
+		if is_target_window and not self.inLayeredMode:
+			self.inLayeredMode = True
+			if getattr(self, "player", None) and self.current_file_path:
+				if not self.player.is_playing():
+					self.player.play()
+			tones.beep(800, 40)
+			ui.message(_("Listen Mode Active"))
+		elif not is_target_window and self.inLayeredMode:
+			self.inLayeredMode = False
+			tones.beep(200, 40)
+			ui.message(_("Listen Mode Hidden"))
+
+	def event_foreground(self, obj, nextHandler):
 		try:
-			fg_handle = api.getForegroundObject().windowHandle
-			is_target_window = (fg_handle == self.target_window_handle)
-			
-			if is_target_window and not self.inLayeredMode:
-				self.inLayeredMode = True
-				if self.player and self.current_file_path:
-					if not self.player.is_playing():
-						self.player.play()
-				tones.beep(800, 40)
-				ui.message(_("Listen Mode Active"))
-			elif not is_target_window and self.inLayeredMode:
-				self.inLayeredMode = False
-				tones.beep(200, 40)
-				ui.message(_("Listen Mode Hidden"))
+			if self.current_file_path and self.target_window_handle:
+				fg_handle = getattr(obj, "windowHandle", 0)
+				self._update_layer_state(fg_handle)
 		except Exception as e:
-			logHandler.log.debug(f"event_gainFocus error: {e}")
+			logHandler.log.debug(f"Listen: event_foreground error: {e}")
+			
+		nextHandler()
+
+	def event_gainFocus(self, obj, nextHandler):
+		# WATCHDOG: O(1) Fast check to bypass UIA calls instantly if Listen Mode is inactive
+		if not self.current_file_path or not self.target_window_handle:
+			return nextHandler()
+
+		try:
+			# Use the real system foreground window, not GA_ROOT of the focused
+			# object. Transient popups (context menu, type-ahead search box, rename
+			# edit) are often separate top-level windows whose GA_ROOT does not
+			# resolve back to Explorer, which was causing a false "window changed"
+			# detection and silently dropping Listen Mode to Hidden.
+			fg_hwnd = winUser.getForegroundWindow()
+			if fg_hwnd:
+				self._update_layer_state(fg_hwnd)
+		except Exception as e:
+			logHandler.log.debug(f"Listen: event_gainFocus error: {e}")
+			
 		nextHandler()
 
 	def _execute_tap_action(self):
 		if self.tap_count == 1:
 			if not self.current_file_path:
-				path, window_handle, folder_path = self._get_path_from_explorer()
-				if path:
-					self._perform_enter_layer(path, window_handle, folder_path)
-				else:
-					ui.message(_("Select Audio File"))
+				self._resolve_explorer_target_async()
 			else:
 				if not self.inLayeredMode:
 					self.inLayeredMode = True
@@ -161,7 +222,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 					tones.beep(600, 40)
 		
 		elif self.tap_count == 2:
-			if self.player and self.current_file_path:
+			if getattr(self, "player", None) and self.current_file_path:
 				self.player.stop(self.current_file_path)
 			self.inLayeredMode = False
 			self.current_file_path = None
@@ -190,10 +251,10 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		if self._pending_tap_action:
 			try:
 				self._pending_tap_action.Stop()
-			except:
+			except Exception:
 				pass
 		
-		self._pending_tap_action = wx.CallLater(int(TAP_THRESHOLD * 1000), self._execute_tap_action)
+		self._pending_tap_action = core.callLater(int(TAP_THRESHOLD * 1000), self._execute_tap_action)
 
 	@scriptHandler.script(
 		description="Hide Listen Mode (Audio continues)",
@@ -218,7 +279,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		gesture=None
 	)
 	def script_togglePause(self, gesture):
-		if self.player and self.current_file_path:
+		if getattr(self, "player", None) and self.current_file_path:
 			self.player.toggle_pause()
 
 	@scriptHandler.script(
@@ -227,7 +288,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		gesture=None
 	)
 	def script_seekForward(self, gesture):
-		if self.player and self.current_file_path:
+		if getattr(self, "player", None) and self.current_file_path:
 			self.player.seek(10)
 
 	@scriptHandler.script(
@@ -236,7 +297,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		gesture=None
 	)
 	def script_seekBackward(self, gesture):
-		if self.player and self.current_file_path:
+		if getattr(self, "player", None) and self.current_file_path:
 			self.player.seek(-10)
 
 	@scriptHandler.script(
@@ -245,7 +306,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		gesture=None
 	)
 	def script_volUp(self, gesture):
-		if self.player and self.current_file_path:
+		if getattr(self, "player", None) and self.current_file_path:
 			self.player.change_volume(2)
 
 	@scriptHandler.script(
@@ -254,7 +315,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		gesture=None
 	)
 	def script_volDown(self, gesture):
-		if self.player and self.current_file_path:
+		if getattr(self, "player", None) and self.current_file_path:
 			self.player.change_volume(-2)
 
 	@scriptHandler.script(
@@ -263,7 +324,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		gesture=None
 	)
 	def script_restartFile(self, gesture):
-		if self.player and self.current_file_path:
+		if getattr(self, "player", None) and self.current_file_path:
 			self.player.restart_current()
 
 	@scriptHandler.script(
@@ -272,7 +333,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		gesture=None
 	)
 	def script_clearData(self, gesture):
-		if self.player and self.current_file_path:
+		if getattr(self, "player", None) and self.current_file_path:
 			self.player.clear_positions()
 			tones.beep(400, 50)
 			ui.message(_("History Cleared"))
@@ -303,7 +364,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 			return
 		try:
 			was_playing = False
-			if self.player:
+			if getattr(self, "player", None):
 				was_playing = self.player.is_playing()
 				self.player.stop(self.current_file_path)
 			current_name = os.path.basename(self.current_file_path)
@@ -313,13 +374,13 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 				idx = 0
 			new_idx = (idx + delta) % len(files)
 			new_path = os.path.join(folder, files[new_idx])
-			if self.player and self.player.load(new_path):
+			if getattr(self, "player", None) and self.player.load(new_path):
 				self.current_file_path = new_path
 				if was_playing or self.inLayeredMode:
 					self.player.play()
 				ui.message(files[new_idx])
 		except Exception as e:
-			logHandler.log.debug(f"Navigate error: {e}")
+			logHandler.log.debug(f"Listen: Navigate error: {e}")
 
 	@scriptHandler.script(
 		description="Show current playback position",
@@ -327,7 +388,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		gesture=None
 	)
 	def script_currentTime(self, gesture):
-		if self.player and self.current_file_path:
+		if getattr(self, "player", None) and self.current_file_path:
 			pos = self.player.get_position()
 			if pos is not None:
 				ui.message(self._format_time(pos))
@@ -340,7 +401,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		gesture=None
 	)
 	def script_remainingTime(self, gesture):
-		if self.player and self.current_file_path:
+		if getattr(self, "player", None) and self.current_file_path:
 			pos = self.player.get_position()
 			total = self.player.get_total_length()
 			if pos is not None and total is not None:
@@ -355,7 +416,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		gesture=None
 	)
 	def script_totalTime(self, gesture):
-		if self.player and self.current_file_path:
+		if getattr(self, "player", None) and self.current_file_path:
 			total = self.player.get_total_length()
 			if total is not None:
 				ui.message(self._format_time(total))
@@ -368,7 +429,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		gesture=None
 	)
 	def script_seekToLast10(self, gesture):
-		if self.player and self.current_file_path:
+		if getattr(self, "player", None) and self.current_file_path:
 			total = self.player.get_total_length()
 			if total is not None:
 				seek_to = max(0, total - 10000)
@@ -382,7 +443,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		gesture=None
 	)
 	def script_setBookmark(self, gesture):
-		if self.player and self.current_file_path:
+		if getattr(self, "player", None) and self.current_file_path:
 			current_pos = self.player.get_position()
 			self.player.add_bookmark(current_pos)
 
@@ -392,7 +453,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		gesture=None
 	)
 	def script_nextBookmark(self, gesture):
-		if self.player and self.current_file_path:
+		if getattr(self, "player", None) and self.current_file_path:
 			if not self.player.go_to_next_bookmark():
 				tones.beep(100, 100)
 
@@ -402,7 +463,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		gesture=None
 	)
 	def script_prevBookmark(self, gesture):
-		if self.player and self.current_file_path:
+		if getattr(self, "player", None) and self.current_file_path:
 			if not self.player.go_to_prev_bookmark():
 				tones.beep(100, 100)
 
@@ -420,8 +481,8 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		if self._pending_tap_action:
 			try:
 				self._pending_tap_action.Stop()
-			except:
+			except Exception:
 				pass
-		if self.player:
+		if getattr(self, "player", None):
 			self.player.stop(self.current_file_path)
 		super().terminate()
