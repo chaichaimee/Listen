@@ -66,159 +66,210 @@ b {
 <div class="section">
     <img src="https://www.nvaccess.org/files/nvda/documentation/userGuide/images/nvda.ico" alt="NVDA Logo" class="nvda-logo">
     <h1>Listen</h1>
-
+    <br>
+    <p style="text-align: center;">Control background audio from anywhere. Auto-hides when you switch tasks, returns when you're back.</p>
+</div>
 <br>
-
-<p style="text-align: center;">The ultimate seamless audio companion designed to let you preview, control, and navigate your audio playlist effortlessly from anywhere on your system.</div>
-
-<br>
-
 <div class="section">
     <p style="text-align: center;"><b>author:</b> chai chaimee</p>
     <p style="text-align: center;"><b>url:</b> https://github.com/chaichaimee/Listen</p>
 </div>
-
-<hr>
-
-<div class="section">
-    <h2>Description</h2>
-    <p><b>Listen</b> transforms the way you interact with audio files on your computer. Instead of opening bulky, distracting media players every time you want to review an audio track, Listen embeds a powerful, lightweight background audio engine directly into your NVDA screen reader. Whether you are dealing with massive folders of sound effects, lectures, music, or recordings, this add-on gives you the freedom to control your audio on the fly without ever losing your place or interrupting your workflow.</p>
-</div>
-        
 <br>
 
 <div class="section">
-    <h2>Hot Keys</h2>
-    <p>The primary gateway to managing your audio is the Master Control Key. This key behaves differently depending on how many times you press it in quick succession:</p>
-    
-    <div class="tap-explanation">
-        <p><b>Master Control Key: Alt + Windows + L</b></p>
-        <ul>
-            <li><b>Single Tap:</b> Activates Listen Mode on a selected file, or instantly wakes up/brings back control of your background music from anywhere on your PC.</li>
-            <li><b>Double Tap:</b> Permanently stops the current audio, saves your position, and completely closes the media layer.</li>
-        </ul>
-    </div>
-    
-    <br>
-    <h3>Listen Mode Control Map (Active Only Inside Listen Mode)</h3>
-    <p>Once Listen Mode is active, your keyboard temporarily transforms into an interactive media console. The following dedicated single-key commands become available:</p>
-    
-    <div class="hotkey">
-        <ul>
-            <li><b>Escape or Q:</b> Hides the Listen Control Mode so you can resume normal computer tasks while the audio keeps playing smoothly in the background.</li>
-            <li><b>Spacebar or C:</b> Toggle Play / Pause.</li>
-            <li><b>Right Arrow:</b> Fast forward by 10 seconds.</li>
-            <li><b>Left Arrow:</b> Rewind by 10 seconds.</li>
-            <li><b>Page Up:</b> Increase volume.</li>
-            <li><b>Page Down:</b> Decrease volume.</li>
-            <li><b>Up Arrow:</b> Skip to the Previous audio file in the folder.</li>
-            <li><b>Down Arrow:</b> Skip to the Next audio file in the folder.</li>
-            <li><b>X:</b> Restart the current track from the very beginning.</li>
-            <li><li><b>Z:</b> Clear your entire playback history and saved positions.</li>
-            <li><b>W:</b> Announce the current playback position.</li>
-            <li><b>R:</b> Announce the remaining time left on the track.</li>
-            <li><b>T:</b> Announce the total duration of the track.</li>
-            <li><b>E:</b> Instantly skip ahead to the last 10 seconds of the audio track.</li>
-            <li><b>B:</b> Drop a custom smart bookmark at the current playback timestamp.</li>
-            <li><b>Ctrl + B:</b> Jump directly forward to your next saved bookmark.</li>
-            <li><b>Shift + B:</b> Jump directly backward to your previous saved bookmark.</li>
-        </ul>
-    </div>
+<h2>Introduction</h2>
+<br>
+<p>Listen lets you play an audio file straight from File Explorer and control it with simple single keys, without opening a media player. Select an audio file, press one hotkey, and the file starts playing while you keep working.</p>
+<br>
+<p>While Listen Mode is active, ordinary keys such as Space, the arrow keys, Page Up and Page Down become playback controls. When you switch to another window, the controls hide automatically so your keyboard behaves normally again. When you return to the window where you started, the controls come back and the audio resumes if it was stopped.</p>
+<br>
+<p>Listen remembers where you stopped in each file, your volume level, and your bookmarks, so you can continue exactly where you left off.</p>
+<br>
+<p><b>Supported formats:</b> MP3, WAV, WMA, M4A, FLAC, AAC, OGG, OPUS, MID, MIDI</p>
 </div>
-
 <br>
 
 <div class="section">
-    <h2>Features</h2>
-    
-    <div class="feature-item">
-        <h3>1. The Zero-Interruption Folder Workflow</h3>
-        <p>Managing massive audio collections can be exhausting when you have to open and close files one by one. Listen completely fixes this hassle by grouping entire folders automatically.</p>
-        <p><b>Step-by-Step Guide:</b></p>
-        <ol>
-            <li>Open File Explorer and browse to any folder containing audio tracks.</li>
-            <li>Focus on any supported audio file (such as MP3, WAV, WMA, M4A, FLAC, AAC, OGG, OPUS, or MIDI).</li>
-            <li>Press <b>Alt + Windows + L (Single Tap)</b>. You will hear a sharp confirmation tone and NVDA will say <i>"Listen Mode Active"</i>. Your audio starts playing immediately.</li>
-            <li>Want to hear the next track? Simply press the <b>Down Arrow</b>. Want to go back? Press the <b>Up Arrow</b>. Listen will swap files instantly while keeping your focus comfortably right inside your folder.</li>
-        </ol>
-    </div>
-    
-    <br>
-    
-    <div class="feature-item">
-        <h3>2. Ambient Playback and Intelligent Window Hiding</h3>
-        <p>Need to take notes or read a document while listening to an audio file? Listen lets you put the playback system into the background without interrupting the sound.</p>
-        <p><b>Step-by-Step Guide:</b></p>
-        <ol>
-            <li>While listening to a track inside Listen Mode, press <b>Q</b> or <b>Escape</b>. You will hear a lower tone and NVDA will announce <i>"Listen Mode Hidden"</i>.</li>
-            <li>Your audio continues playing seamlessly, but your keyboard is instantly released back to normal, allowing you to type, navigate webs, or fill out forms.</li>
-            <li>Alternatively, simply pressing <b>Alt + Tab</b> to look at another application window will automatically hide Listen Mode, putting safety locks on your media hotkeys so you never press them by accident.</li>
-        </ol>
-    </div>
-    
-    <br>
-    
-    <div class="feature-item">
-        <h3>3. Global Remote Control From Anywhere</h3>
-        <p>What if you are working deep inside a Word document or a web browser, and you want to pause, rewind, or skip to the next audio track without navigating back to your original folder?</p>
-        <p><b>Step-by-Step Guide:</b></p>
-        <ol>
-            <li>No matter what program or window you are currently using, press <b>Alt + Windows + L (Single Tap)</b>.</li>
-            <li>Listen instantly wakes up and reconnects your keyboard directly to your running audio file. You will hear the high-pitched tone and NVDA will say <i>"Listen Mode Active"</i>.</li>
-            <li>You can now immediately use any of the media control keys (e.g., Spacebar to pause, Left/Right Arrows to skip through time, or Up/Down Arrows to swap tracks inside that remote folder).</li>
-            <li>Once you are done adjusting, press <b>Q</b> or <b>Escape</b> to immediately lock your keys back to your document text. You never have to interrupt your visual focus or change your working window.</li>
-        </ol>
-    </div>
-    
-    <br>
-    
-    <div class="feature-item">
-        <h3>4. Smart Memory: Automatic Resume & History Management</h3>
-        <p>Never lose your spot again. Listen acts like an intelligent bookkeeper that watches over your position and audio preferences.</p>
-        <p><b>Step-by-Step Guide:</b></p>
-        <ol>
-            <li>If you need to stop your audio entirely, press <b>Alt + Windows + L twice (Double Tap)</b>. You will hear a low buzz and NVDA will report <i>"Permanently Stopped"</i>.</li>
-            <li>The add-on instantly remembers your exact second in that track, along with your volume settings.</li>
-            <li>The next time you return to that file and trigger it with a single tap, it will pick up right where you left off.</li>
-            <li>If your history gets too cluttered or you want to review tracks fresh from the start, press <b>Z</b> while in active Listen Mode to wipe your playback memory clean instantly.</li>
-        </ol>
-    </div>
-    
-    <br>
-    
-    <div class="feature-item">
-        <h3>5. Precise Timestamp Bookmarking</h3>
-        <p>When reviewing long recordings or lectures, dropping anchors at vital spots is essential. Listen lets you save unlimited custom points within any track.</p>
-        <p><b>Step-by-Step Guide:</b></p>
-        <ol>
-            <li>While listening to an active file, press <b>B</b> at any exact moment you hear something important. A chime will play, letting you know your bookmark is saved.</li>
-            <li>To quickly scan through your important highlights, press <b>Ctrl + B</b> to fly forward to the next bookmark, or <b>Shift + B</b> to travel backward to previous bookmarks.</li>
-        </ol>
-    </div>
+<h3>Hot Keys</h3>
+<br>
+<div class="hotkey">
+<b>ALT+Windows+L</b><br>
+Single Tap : Open Listen Mode<br>
+Double Tap : Close Listen Mode
 </div>
-    
+<br>
+<h3>Layer Mode Keys</h3>
+<br>
+<p>These keys work only while Listen Mode is active.</p>
+<br>
+<div class="hotkey">
+<b>Playback</b><br>
+Space or C : Play / Pause<br>
+Right Arrow : Forward 10 seconds<br>
+Left Arrow : Back 10 seconds<br>
+X : Restart the current file from the beginning<br>
+E : Jump to the last 10 seconds of the file<br>
+Up Arrow : Previous audio file in the folder<br>
+Down Arrow : Next audio file in the folder<br>
+Escape or Q : Hide Listen Mode (audio keeps playing)
+</div>
+<div class="hotkey">
+<b>Volume</b><br>
+Page Up : Volume up<br>
+Page Down : Volume down
+</div>
+<div class="hotkey">
+<b>Time Information</b><br>
+W : Current position<br>
+R : Remaining time<br>
+T : Total duration
+</div>
+<div class="hotkey">
+<b>Bookmarks</b><br>
+B : Add a bookmark at the current position<br>
+Ctrl+B : Go to the next bookmark<br>
+Shift+B : Go to the previous bookmark
+</div>
+<div class="hotkey">
+<b>Jump by Percentage</b><br>
+1 to 9 : Jump to 10% to 90% of the file (1 = 10%, 2 = 20%, and so on up to 9 = 90%)
+</div>
+<div class="hotkey">
+<b>History</b><br>
+Z : Clear all saved positions and bookmarks
+</div>
+</div>
+<br>
+
+<div class="section">
+<h3>Features</h3>
+<br>
+
+<div class="feature-item">
+<h3>Start Listening from File Explorer</h3>
+<br>
+<p>Listen works on the audio file that is currently focused in a File Explorer window.</p>
+<br>
+<div class="tap-explanation">
+1. In File Explorer, move focus to a supported audio file.<br>
+2. Press ALT+Windows+L once.<br>
+3. You hear a beep and NVDA says "Listen Mode Active". The file starts playing.<br>
+4. If the focused item is not a supported audio file, NVDA says "Select Audio File". If the file cannot be opened, NVDA says "Error loading file".
+</div>
+</div>
+<br>
+
+<div class="feature-item">
+<h3>Auto Hide and Auto Return</h3>
+<br>
+<p>Listen Mode is tied to the File Explorer window where you started it. When you switch to a different window, a low beep sounds, NVDA says "Listen Mode Hidden", and the layer keys are released so every key works normally in your other application. The audio is not interrupted.</p>
+<br>
+<p>When you come back to the original window, a beep sounds, NVDA says "Listen Mode Active", and the layer keys are available again. If the audio had stopped, it starts playing again.</p>
+<br>
+<p>Pressing ALT+Windows+L once while Listen Mode is hidden brings it back manually. Pressing it once while Listen Mode is already active plays a short confirmation beep.</p>
+</div>
+<br>
+
+<div class="feature-item">
+<h3>Hide Without Stopping</h3>
+<br>
+<p>Press Escape or Q to hide Listen Mode while the audio keeps playing. This is useful when you want to type or use Explorer normally without losing your music. Press ALT+Windows+L once to bring the controls back. When Listen Mode is not in use, the Q key behaves as usual.</p>
+</div>
+<br>
+
+<div class="feature-item">
+<h3>Close Listen Mode Completely</h3>
+<br>
+<p>Press ALT+Windows+L twice. The playback position, bookmarks, and volume are saved, the file is closed, and NVDA says "Permanently Stopped". Listen Mode will not return until you start it again from a new audio file.</p>
+</div>
+<br>
+
+<div class="feature-item">
+<h3>Resume Where You Left Off</h3>
+<br>
+<p>Each time a file is stopped, closed, or you move to another file, Listen saves its playback position. The next time you open that same file, playback continues from the saved position instead of the beginning.</p>
+<br>
+<p>Example: You listen to a lecture until 25:10 and close Listen Mode. The next day you select the same file and press ALT+Windows+L. The lecture continues from 25:10.</p>
+</div>
+<br>
+
+<div class="feature-item">
+<h3>Browse Files in the Folder</h3>
+<br>
+<p>Press Down Arrow for the next audio file or Up Arrow for the previous one. Listen looks at the folder of the current file, lists the supported audio files in alphabetical order, and plays the neighbouring file. NVDA announces the file name. After the last file it wraps to the first, and from the first file going back it wraps to the last. If the folder has no audio files, NVDA says "No audio files in folder".</p>
+</div>
+<br>
+
+<div class="feature-item">
+<h3>Bookmarks</h3>
+<br>
+<p>You can mark important moments in a file and jump between them later. Bookmarks are saved separately for every file.</p>
+<br>
+<div class="tap-explanation">
+1. While the file is playing, press B at the moment you want to remember.<br>
+2. A high beep confirms the first bookmark. When the file already has bookmarks, you hear two beeps in a row.<br>
+3. Repeat for any other moments. Bookmarks are kept in time order.<br>
+4. Press Ctrl+B to jump to the next bookmark, or Shift+B to jump to the previous one. A beep confirms each jump.<br>
+5. If there is no bookmark in that direction, a low beep sounds.
+</div>
+<br>
+<p>A bookmark is not added if another bookmark already exists within half a second of the current position. In that case you hear a single short beep instead.</p>
+</div>
+<br>
+
+<div class="feature-item">
+<h3>Jump by Percentage</h3>
+<br>
+<p>Keys 1 to 9 move playback to 10%, 20%, up to 90% of the total length of the file and NVDA announces the percentage.</p>
+<br>
+<p>Example: Press 5 to jump to the middle of the file. NVDA says "50 percent".</p>
+</div>
+<br>
+
+<div class="feature-item">
+<h3>Time Announcements</h3>
+<br>
+<p>Press W for the current position, R for the remaining time, and T for the total duration. Times are spoken as minutes and seconds, or as hours, minutes, and seconds for longer files.</p>
+</div>
+<br>
+
+<div class="feature-item">
+<h3>Volume</h3>
+<br>
+<p>Page Up and Page Down change the volume in small steps between 0 and 100. The default volume is 40, and your last volume level is remembered the next time you use Listen.</p>
+</div>
+<br>
+
+<div class="feature-item">
+<h3>Clear History</h3>
+<br>
+<p>Press Z to delete every saved playback position and bookmark for all files. NVDA says "History Cleared".</p>
+</div>
+<br>
+
+<div class="feature-item">
+<h3>Saved Settings</h3>
+<br>
+<p>Your volume, playback positions, and bookmarks are stored in the file listen.json inside the folder ChaiChaimee\Listen in your NVDA user configuration folder. If you used an older version, your existing settings are moved to this new location automatically the first time the updated add-on loads.</p>
+</div>
+</div>
+
 <br><br>
 <h2>Support Me</h2>
     <p>If this tool has made your life easier, consider fueling the next update with a small donation.</p>
-
 <br>
-
 <p>
   <a href="https://buy.stripe.com/dRm9AU1xQ3Ds22N6VK1VK01">
     <img src="https://img.shields.io/badge/Donate-Support%20Me-blue?style=for-the-badge&logo=stripe" alt="Support me">
   </a>
 </p>
 <br>
-
-
 <p>Your support means the world. Let's build something great together</p>
-
 <br>
-
   <div class="footer-note">
-<p>&copy; 2026 Chai Chaimee NVDA Add-on Released under GNU General Public License.</p>
+<p>&copy; 2026 Chai Chaimee NVDA Add-on Released under GNU GPL</p>
 </div>
 
-</div>
+</div> <!-- End container -->
 </body>
 </html>

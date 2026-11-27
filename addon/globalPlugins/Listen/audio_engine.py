@@ -1,21 +1,17 @@
-# Copyright (C) 2026 Chai Chaimee
-# Licensed under GNU General Public License. See COPYING.txt for details.
+# audio_engine.py
 
 import os
-import json
-import globalVars
 import logHandler
 import tones
 import core
 from ctypes import windll, create_unicode_buffer, byref, c_uint
+from . import listenConfig
 
 BOOKMARK_CHIME_GAP_MS = 90
 
 class AudioPlayer:
 	def __init__(self):
-		self.config_dir = os.path.join(globalVars.appArgs.configPath, "ChaiChaimee")
-		self.config_path = os.path.join(self.config_dir, "listen.json")
-		self.data = self._load_config()
+		self.data = listenConfig.loadConfig()
 		self.alias = "ChaiListenPlayer"
 		self._volume = self.data.get("volume", 40)
 		self._is_wav = False
@@ -24,24 +20,6 @@ class AudioPlayer:
 		self._current_bookmark_index = -1
 		self._current_file_path = None
 		self._is_loaded = False
-
-	def _load_config(self):
-		if not os.path.exists(self.config_dir):
-			os.makedirs(self.config_dir)
-		if not os.path.exists(self.config_path):
-			default = {"volume": 40, "positions": {}, "bookmarks": {}}
-			try:
-				with open(self.config_path, 'w', encoding='utf-8') as f:
-					json.dump(default, f, indent=4)
-			except Exception as e:
-				logHandler.log.debug(f"Listen: Failed to create default config: {e}")
-			return default
-		try:
-			with open(self.config_path, 'r', encoding='utf-8') as f:
-				return json.load(f)
-		except Exception as e:
-			logHandler.log.debug(f"Listen: Failed to load config: {e}")
-			return {"volume": 40, "positions": {}, "bookmarks": {}}
 
 	def _send_command(self, cmd):
 		buffer = create_unicode_buffer(255)
@@ -158,11 +136,7 @@ class AudioPlayer:
 		return "playing" in status.lower()
 
 	def save_data(self):
-		try:
-			with open(self.config_path, 'w', encoding='utf-8') as f:
-				json.dump(self.data, f, indent=4)
-		except Exception as e:
-			logHandler.log.debug(f"Listen: Failed to save config: {e}")
+		listenConfig.saveConfig(self.data)
 
 	def clear_positions(self):
 		self.data["positions"] = {}
@@ -221,6 +195,13 @@ class AudioPlayer:
 			self._send_command(f"play {self.alias}")
 		except Exception:
 			pass
+
+	def seek_to_percent(self, percent):
+		total = self.get_total_length()
+		if not total:
+			return False
+		self.seek_to(int(total * percent / 100))
+		return True
 
 	def set_volume(self, value):
 		self._volume = max(0, min(100, value))

@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Listen NVDA Add-on</title>
+<title>Complemento Listen para NVDA</title>
 <style>
 body {
     font-family: Arial, sans-serif;
@@ -64,161 +64,212 @@ b {
 <div class="container">
 
 <div class="section">
-    <img src="https://www.nvaccess.org/files/nvda/documentation/userGuide/images/nvda.ico" alt="NVDA Logo" class="nvda-logo">
+    <img src="https://www.nvaccess.org/files/nvda/documentation/userGuide/images/nvda.ico" alt="Logotipo de NVDA" class="nvda-logo">
     <h1>Listen</h1>
-
-<br>
-
-<p style="text-align: center;">Tu compañero de audio definitivo e integrado, diseñado para permitirte previsualizar, controlar y navegar por tu lista de reproducción multimedia sin esfuerzo desde cualquier lugar de tu sistema.</p>
+    <br>
+    <p style="text-align: center;">Controla el audio en segundo plano desde cualquier lugar. Se oculta automáticamente al cambiar de tarea y vuelve al regresar.</p>
 </div>
-
 <br>
-
 <div class="section">
     <p style="text-align: center;"><b>Autor:</b> chai chaimee</p>
     <p style="text-align: center;"><b>URL:</b> https://github.com/chaichaimee/Listen</p>
 </div>
-
-<hr>
-
-<div class="section">
-    <h2>Descripción</h2>
-    <p><b>Listen</b> transforma por completo la forma en que interactúas con los archivos de audio en tu ordenador. En lugar de abrir reproductores multimedia pesados y molestos cada vez que quieres revisar una pista, Listen integra un motor de audio en segundo plano potente y ligero directamente en tu lector de pantalla NVDA. Ya sea que manejes carpetas masivas de efectos de sonido, conferencias, música o grabaciones, este complemento te da la libertad de controlar tu audio sobre la marcha sin perder nunca tu posición ni interrumpir tu flujo de trabajo.</p>
-</div>
-        
 <br>
 
 <div class="section">
-    <h2>Teclas Rápidas</h2>
-    <p>La puerta de acceso principal para gestionar tu audio es la Tecla de Control Maestro. Esta tecla se comporta de forma diferente según la cantidad de veces que la presiones en sucesión rápida:</p>
-    
-    <div class="tap-explanation">
-        <p><b>Tecla de Control Maestro: Alt + Windows + L</b></p>
-        <ul>
-            <li><b>Un toque:</b> Activa el Modo Listen en un archivo seleccionado, o reactiva/recupera instantáneamente el control de tu música en segundo plano desde cualquier lugar de tu PC.</li>
-            <li><b>Dos toques:</b> Detiene permanentemente el audio actual, guarda tu posición y cierra por completo la capa multimedia.</li>
-        </ul>
-    </div>
-    
-    <br>
-    <h3>Mapa de Control del Modo Listen (Activo solo dentro del Modo Listen)</h3>
-    <p>Una vez activado el Modo Listen, tu teclado se transforma temporalmente en una consola multimedia interactiva. Los siguientes comandos dedicados de una sola tecla estarán disponibles:</p>
-    
-    <div class="hotkey">
-        <ul>
-            <li><b>Escape o Q:</b> Oculta el Modo de Control de Listen para que puedas reanudar las tareas normales del ordenador mientras el audio se sigue reproduciendo fluidamente en segundo plano.</li>
-            <li><b>Barra espaciadora o C:</b> Alternar Reproducción / Pausa.</li>
-            <li><b>Flecha Derecha:</b> Avanzar rápido 10 segundos.</li>
-            <li><b>Flecha Izquierda:</b> Retroceder 10 segundos.</li>
-            <li><b>Re Pág (Page Up):</b> Aumentar el volumen.</li>
-            <li><b>Av Pág (Page Down):</b> Disminuir el volumen.</li>
-            <li><b>Flecha Arriba:</b> Saltar al archivo de audio anterior en la carpeta.</li>
-            <li><b>Flecha Abajo:</b> Saltar al siguiente archivo de audio en la carpeta.</li>
-            <li><b>X:</b> Reiniciar la pista actual desde el principio.</li>
-            <li><b>Z:</b> Borrar todo el historial de reproducción y las posiciones guardadas.</li>
-            <li><b>W:</b> Verbalizar la posición actual de la reproducción.</li>
-            <li><b>R:</b> Verbalizar el tiempo restante de la pista.</li>
-            <li><b>T:</b> Verbalizar la duración total de la pista.</li>
-            <li><b>E:</b> Saltar instantáneamente a los últimos 10 segundos de la pista de audio.</li>
-            <li><b>B:</b> Colocar un marcador inteligente personalizado en la posición de tiempo actual.</li>
-            <li><b>Ctrl + B:</b> Saltar directamente hacia adelante al siguiente marcador guardado.</li>
-            <li><b>Mayús + B:</b> Saltar directamente hacia atrás al marcador guardado anterior.</li>
-        </ul>
-    </div>
+<h2>Introducción</h2>
+<br>
+<p>Listen te permite reproducir un archivo de audio directamente desde el Explorador de archivos y controlarlo con teclas sencillas, sin abrir un reproductor multimedia. Selecciona un archivo de audio, pulsa un atajo de teclado y el archivo comenzará a reproducirse mientras sigues trabajando.</p>
+<br>
+<p>Mientras el modo Listen está activo, teclas normales como Barra espaciadora, las flechas, Re Pág y Av Pág se convierten en controles de reproducción. Cuando cambias a otra ventana, los controles se ocultan automáticamente para que el teclado vuelva a funcionar con normalidad. Al volver a la ventana donde empezaste, los controles reaparecen y el audio se reanuda si estaba detenido.</p>
+<br>
+<p>Listen recuerda en qué punto te detuviste en cada archivo, el nivel de volumen y tus marcadores, para que puedas continuar justo donde lo dejaste.</p>
+<br>
+<p><b>Formatos compatibles:</b> MP3, WAV, WMA, M4A, FLAC, AAC, OGG, OPUS, MID, MIDI</p>
 </div>
-
 <br>
 
 <div class="section">
-    <h2>Características</h2>
-    
-    <div class="feature-item">
-        <h3>1. Flujo de trabajo en carpetas sin interrupciones</h3>
-        <p>Gestionar colecciones masivas de audio puede ser agotador si tienes que abrir y cerrar archivos uno por uno. Listen soluciona este problema por completo agrupando carpetas enteras de forma automática.</p>
-        <p><b>Guía paso a paso:</b></p>
-        <ol>
-            <li>Abre el Explorador de archivos y navega hasta cualquier carpeta que contenga pistas de audio.</li>
-            <li>Sitúa el foco en cualquier archivo de audio compatible (como MP3, WAV, WMA, M4A, FLAC, AAC, OGG, OPUS o MIDI).</li>
-            <li>Presiona <b>Alt + Windows + L (Un toque)</b>. Escucharás un tono agudo de confirmación y el NVDA dirá <i>"Modo Listen activo"</i>. Tu audio comenzará a reproducirse inmediatamente.</li>
-            <li>¿Quieres escuchar la siguiente pista? Simplemente presiona la <b>Flecha Abajo</b>. ¿Quieres volver atrás? Presiona la <b>Flecha Arriba</b>. Listen cambiará de archivo instantáneamente mientras mantiene tu foco cómodamente dentro de la carpeta.</li>
-        </ol>
-    </div>
-    
-    <br>
-    
-    <div class="feature-item">
-        <h3>2. Reproducción ambiental y ocultación inteligente de ventanas</h3>
-        <p>¿Necesitas tomar notas o leer un documento mientras escuchas un archivo de audio? Listen te permite poner el sistema de reproducción en segundo plano sin interrumpir el sonido.</p>
-        <p><b>Guía paso a paso:</b></p>
-        <ol>
-            <li>Mientras escuchas una pista dentro del Modo Listen, presiona <b>Q</b> o <b>Escape</b>. Escucharás un tono más bajo y el NVDA anunciará <i>"Modo Listen oculto"</i>.</li>
-            <li>Tu audio continuará reproduciéndose sin interrupciones, pero tu teclado se liberará instantáneamente para volver a la normalidad, lo que te permitirá escribir, navegar por la web o rellenar formularios.</li>
-            <li>Alternativamente, al presionar simplemente <b>Alt + Tab</b> para cambiar a otra ventana de aplicación, el Modo Listen se ocultará automáticamente, activando bloqueos de seguridad en las teclas rápidas multimedia para que nunca las presiones por accidente.</li>
-        </ol>
-    </div>
-    
-    <br>
-    
-    <div class="feature-item">
-        <h3>3. Control remoto global desde cualquier lugar</h3>
-        <p>¿Qué pasa si estás trabajando concentrado dentro de un documento de Word o un navegador web y quieres pausar, retroceder o saltar a la siguiente pista de audio sin tener que regresar a la carpeta original?</p>
-        <p><b>Guía paso a paso:</b></p>
-        <ol>
-            <li>Sin importar qué programa o ventana estés utilizando actualmente, presiona <b>Alt + Windows + L (Un toque)</b>.</li>
-            <li>Listen se activará instantáneamente y volverá a conectar tu teclado directamente al archivo de audio en reproducción. Escucharás el tono agudo y el NVDA dirá <i>"Modo Listen activo"</i>.</li>
-            <li>Ahora puedes usar inmediatamente cualquiera de las teclas de control multimedia (por ejemplo, la Barra espaciadora para pausar, las Flechas Izquierda/Derecha para avanzar o retroceder en el tiempo, o las Flechas Arriba/Abajo para cambiar de pista dentro de esa carpeta remota).</li>
-            <li>Una vez que hayas terminado con los ajustes, presiona <b>Q</b> o <b>Escape</b> para bloquear inmediatamente tus teclas de nuevo en el texto del documento. Nunca tendrás que interrumpir tu foco visual ni cambiar tu ventana de trabajo.</li>
-        </ol>
-    </div>
-    
-    <br>
-    
-    <div class="feature-item">
-        <h3>4. Memoria inteligente: Reanudación automática y gestión del historial</h3>
-        <p>No vuelvas a perder tu punto de reproducción. Listen actúa como un contable inteligente que vigila tu posición y tus preferencias de audio.</p>
-        <p><b>Guía paso a paso:</b></p>
-        <ol>
-            <li>Si necesitas detener el audio por completo, presiona <b>Alt + Windows + L dos veces (Dos toques)</b>. Escucharás un zumbido bajo y el NVDA informará <i>"Detenido permanentemente"</i>.</li>
-            <li>El complemento recordará instantáneamente el segundo exacto de esa pista, junto con tus ajustes de volumen.</li>
-            <li>La próxima vez que regreses a ese archivo y lo actives con un solo toque, retomará la reproducción exactamente donde la dejaste.</li>
-            <li>Si tu historial se satura demasiado o quieres revisar las pistas desde el principio, presiona <b>Z</b> mientras estés en el Modo Listen activo para borrar la memoria de reproducción al instante.</li>
-        </ol>
-    </div>
-    
-    <br>
-    
-    <div class="feature-item">
-        <h3>5. Marcadores de tiempo precisos</h3>
-        <p>Al revisar grabaciones largas o conferencias, colocar anclajes en puntos vitales es esencial. Listen te permite guardar puntos personalizados ilimitados dentro de cualquier pista.</p>
-        <p><b>Guía paso a paso:</b></p>
-        <ol>
-            <li>Mientras escuchas un archivo activo, presiona <b>B</b> en el momento exacto en que escuches algo importante. Sonará una señal acústica que te indicará que tu marcador se ha guardado.</li>
-            <li>To navegar rápidamente a través de tus puntos destacados importantes, presiona <b>Ctrl + B</b> para avanzar al siguiente marcador, o <b>Mayús + B</b> para retroceder a los marcadores anteriores.</li>
-        </ol>
-    </div>
+<h3>Teclas rápidas</h3>
+<br>
+<div class="hotkey">
+<b>ALT+Windows+L</b><br>
+Una pulsación : Abrir el modo Listen<br>
+Dos pulsaciones : Cerrar el modo Listen
 </div>
-    
+<br>
+<h3>Teclas del modo capa</h3>
+<br>
+<p>Estas teclas solo funcionan mientras el modo Listen está activo.</p>
+<br>
+<div class="hotkey">
+<b>Reproducción</b><br>
+Espacio o C : Reproducir / Pausar<br>
+Flecha derecha : Adelantar 10 segundos<br>
+Flecha izquierda : Retroceder 10 segundos<br>
+X : Reiniciar el archivo actual desde el principio<br>
+E : Saltar a los últimos 10 segundos del archivo<br>
+Flecha arriba : Archivo de audio anterior en la carpeta<br>
+Flecha abajo : Siguiente archivo de audio en la carpeta<br>
+Escape o Q : Ocultar el modo Listen (el audio sigue reproduciéndose)
+</div>
+<div class="hotkey">
+<b>Volumen</b><br>
+Re Pág : Subir volumen<br>
+Av Pág : Bajar volumen
+</div>
+<div class="hotkey">
+<b>Información de tiempo</b><br>
+W : Posición actual<br>
+R : Tiempo restante<br>
+T : Duración total
+</div>
+<div class="hotkey">
+<b>Marcadores</b><br>
+B : Añadir un marcador en la posición actual<br>
+Ctrl+B : Ir al siguiente marcador<br>
+Mayús+B : Ir al marcador anterior
+</div>
+<div class="hotkey">
+<b>Saltar por porcentaje</b><br>
+1 a 9 : Saltar del 10 % al 90 % del archivo (1 = 10 %, 2 = 20 %, y así hasta 9 = 90 %)
+</div>
+<div class="hotkey">
+<b>Historial</b><br>
+Z : Borrar todas las posiciones guardadas y los marcadores
+</div>
+</div>
+<br>
+
+<div class="section">
+<h3>Características</h3>
+<br>
+
+<div class="feature-item">
+<h3>Empezar a escuchar desde el Explorador de archivos</h3>
+<br>
+<p>Listen funciona sobre el archivo de audio que tiene el foco actualmente en una ventana del Explorador de archivos.</p>
+<br>
+<div class="tap-explanation">
+1. En el Explorador de archivos, mueve el foco a un archivo de audio compatible.<br>
+2. Pulsa ALT+Windows+L una vez.<br>
+3. Escucharás un pitido y NVDA dirá „Listen Mode Active“. El archivo comenzará a reproducirse.<br>
+4. Si el elemento enfocado no es un archivo de audio compatible, NVDA dirá „Select Audio File“. Si no se puede abrir el archivo, NVDA dirá „Error loading file“.
+</div>
+</div>
+<br>
+
+<div class="feature-item">
+<h3>Ocultación automática y retorno automático</h3>
+<br>
+<p>El modo Listen está vinculado a la ventana del Explorador de archivos donde lo iniciaste. Cuando cambias a otra ventana, suena un pitido grave, NVDA dice „Listen Mode Hidden“ y se liberan las teclas de capa para que cada tecla funcione con normalidad en la otra aplicación. El audio no se interrumpe.</p>
+<br>
+<p>Cuando vuelves a la ventana original, suena un pitido, NVDA dice „Listen Mode Active“ y las teclas de capa vuelven a estar disponibles. Si el audio se había detenido, vuelve a reproducirse.</p>
+<br>
+<p>Pulsar ALT+Windows+L una vez mientras el modo Listen está oculto lo muestra de nuevo manualmente. Pulsarlo una vez cuando el modo Listen ya está activo reproduce un pitido corto de confirmación.</p>
+</div>
+<br>
+
+<div class="feature-item">
+<h3>Ocultar sin detener</h3>
+<br>
+<p>Pulsa Escape o Q para ocultar el modo Listen mientras el audio sigue sonando. Esto resulta útil cuando quieres escribir o usar el Explorador con normalidad sin perder la música. Pulsa ALT+Windows+L una vez para volver a mostrar los controles. Cuando el modo Listen no está en uso, la tecla Q funciona como de costumbre.</p>
+</div>
+<br>
+
+<div class="feature-item">
+<h3>Cerrar el modo Listen por completo</h3>
+<br>
+<p>Pulsa ALT+Windows+L dos veces. Se guardan la posición de reproducción, los marcadores y el volumen, se cierra el archivo y NVDA dice „Permanently Stopped“. El modo Listen no volverá hasta que lo inicies de nuevo desde un archivo de audio.</p>
+</div>
+<br>
+
+<div class="feature-item">
+<h3>Reanudar donde lo dejaste</h3>
+<br>
+<p>Cada vez que un archivo se detiene, se cierra o cambias a otro archivo, Listen guarda su posición de reproducción. La próxima vez que abras ese mismo archivo, la reproducción continuará desde la posición guardada en lugar de empezar desde el principio.</p>
+<br>
+<p>Ejemplo: Escuchas una conferencia hasta el 25:10 y cierras el modo Listen. Al día siguiente seleccionas el mismo archivo y pulsas ALT+Windows+L. La conferencia continúa desde el 25:10.</p>
+</div>
+<br>
+
+<div class="feature-item">
+<h3>Explorar archivos de la carpeta</h3>
+<br>
+<p>Pulsa Flecha abajo para ir al siguiente archivo de audio o Flecha arriba para ir al anterior. Listen revisa la carpeta del archivo actual, ordena alfabéticamente los archivos de audio compatibles y reproduce el archivo contiguo. NVDA anuncia el nombre del archivo. Tras el último archivo vuelve al primero, y si retrocedes desde el primero va al último. Si la carpeta no tiene archivos de audio, NVDA dice „No audio files in folder“.</p>
+</div>
+<br>
+
+<div class="feature-item">
+<h3>Marcadores</h3>
+<br>
+<p>Puedes marcar momentos importantes en un archivo y saltar entre ellos más adelante. Los marcadores se guardan por separado para cada archivo.</p>
+<br>
+<div class="tap-explanation">
+1. Mientras el archivo se reproduce, pulsa B en el momento que quieras recordar.<br>
+2. Un pitido agudo confirma el primer marcador. Si el archivo ya tiene marcadores, escucharás dos pitidos seguidos.<br>
+3. Repite esto para otros momentos. Los marcadores se conservan en orden cronológico.<br>
+4. Pulsa Ctrl+B para ir al siguiente marcador, o Mayús+B para ir al anterior. Un pitido confirma cada salto.<br>
+5. Si no hay ningún marcador en esa dirección, suena un pitido grave.
+</div>
+<br>
+<p>No se añade un marcador si ya existe otro a menos de medio segundo de la posición actual. En ese caso escucharás un único pitido corto.</p>
+</div>
+<br>
+
+<div class="feature-item">
+<h3>Saltar por porcentaje</h3>
+<br>
+<p>Las teclas 1 a 9 mueven la reproducción al 10 %, 20 %, hasta el 90 % de la duración total del archivo y NVDA anuncia el porcentaje.</p>
+<br>
+<p>Ejemplo: Pulsa 5 para saltar a la mitad del archivo. NVDA dice „50 percent“.</p>
+</div>
+<br>
+
+<div class="feature-item">
+<h3>Anuncios de tiempo</h3>
+<br>
+<p>Pulsa W para conocer la posición actual, R para el tiempo restante y T para la duración total. Los tiempos se verbalizan en minutos y segundos, o en horas, minutos y segundos en archivos más largos.</p>
+</div>
+<br>
+
+<div class="feature-item">
+<h3>Volumen</h3>
+<br>
+<p>Re Pág y Av Pág cambian el volumen en pequeños incrementos entre 0 y 100. El volumen predeterminado es 40 y se recuerda el último nivel de volumen la próxima vez que uses Listen.</p>
+</div>
+<br>
+
+<div class="feature-item">
+<h3>Borrar historial</h3>
+<br>
+<p>Pulsa Z para eliminar todas las posiciones de reproducción y marcadores guardados de todos los archivos. NVDA dice „History Cleared“.</p>
+</div>
+<br>
+
+<div class="feature-item">
+<h3>Configuración guardada</h3>
+<br>
+<p>Tu volumen, posiciones de reproducción y marcadores se almacenan en el archivo listen.json dentro de la carpeta ChaiChaimee\Listen en tu carpeta de configuración de usuario de NVDA. Si usabas una versión anterior, tu configuración existente se mueve automáticamente a esta nueva ubicación la primera vez que se carga el complemento actualizado.</p>
+</div>
+</div>
+
 <br><br>
 <h2>Apóyame</h2>
-    <p>Si esta herramienta te ha facilitado la vida, considera impulsar la próxima actualización con una pequeña donación.</p>
-
+    <p>Si esta herramienta te ha facilitado el día a día, considera impulsar la próxima actualización con una pequeña donación.</p>
 <br>
-
 <p>
   <a href="https://buy.stripe.com/dRm9AU1xQ3Ds22N6VK1VK01">
     <img src="https://img.shields.io/badge/Donate-Support%20Me-blue?style=for-the-badge&logo=stripe" alt="Support me">
   </a>
 </p>
 <br>
-
-<p>Tu apoyo significa el mundo para mí. Construyamos algo grandioso juntos.</p>
-
+<p>Tu apoyo significa muchísimo. Construyamos algo grandioso juntos</p>
 <br>
-
   <div class="footer-note">
-<p>&copy; 2026 Chai Chaimee Complemento de NVDA Lanzado bajo la Licencia Pública General de GNU.</p>
+<p>&copy; 2026 Complemento NVDA de Chai Chaimee Publicado bajo licencia GNU GPL</p>
 </div>
 
-</div>
+</div> <!-- End container -->
 </body>
 </html>
